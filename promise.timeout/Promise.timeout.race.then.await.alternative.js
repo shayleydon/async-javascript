@@ -27,11 +27,11 @@ Promise.race([MyPromiseRace, timeout]).then(function(data){
  * @param {BigInteger} timeoutInMilliseconds The time limit in milliseconds to fulfill or reject the promise.
  * @returns {Promise} A pending Promise
  */
-Promise.timeout = function(promise, timeoutInMilliseconds){
-//const promiseCb = function(promise, timeoutInMilliseconds){
+//Promise.timeout = function(promise, timeoutInMilliseconds){
+const promiseCb = function(promise, timeoutInMilliseconds){
     return Promise.race([
-        promise,
-        /*new Promise(promise),*/
+        //promise,
+        new Promise(promise),
         new Promise(function(resolve, reject){
             setTimeout(function() {
                 reject("timeout");
@@ -50,12 +50,12 @@ let MyPromiseThen = new Promise(function(resolve, reject){
 // 2. Provide your promise as first argument of the helper function
 // and provide as second parameters the time limit for this promise to be fulfilled
 // in milliseconds (e.g. 3000 = 3 seconds)
-Promise.timeout(MyPromiseThen, 3000).then(function(result){
-/*promiseCb((resolve) => {
+//promiseCb(MyPromiseThen, 3000).then(function(result){
+promiseCb((resolve) => {
             setTimeout(function(){
 		resolve("MyPromiseAwait Success!");
 	    }, 4000);
-        }, 3000).then(function(result){*/
+        }, 3000).then(function(result){
     // My promise fulfilled in less than 3 seconds
     // If fulfilled, it should output: MyPromiseThen Success!
     console.log(result);
@@ -81,12 +81,12 @@ let MyPromiseAwait = new Promise(function(resolve, reject){
 // 2. An example of how to use the timeout with some code that uses await and async
 async function runLogic(){    
     try{
-        const result = await Promise.timeout(MyPromiseAwait, 3000);
-        /*const result = await promiseCb((resolve) => {
+        //const result = await promiseCb(MyPromiseAwait, 3000);
+        const result = await promiseCb((resolve) => {
             setTimeout(function(){
 		resolve("MyPromiseAwait Success!");
 	    }, 4000);
-        }, 3000);*/
+        }, 3000);
 
         // If fulfilled, outputs: MyPromiseAwait Success!
         console.log(result);
